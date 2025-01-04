@@ -1,0 +1,66 @@
+package dev.vansen.pancakecore;
+
+import dev.vansen.commandutils.api.CommandAPI;
+import dev.vansen.pancakecore.commands.EconomyCommand;
+import dev.vansen.pancakecore.commands.user.BalanceCommand;
+import dev.vansen.pancakecore.commands.user.PayCommand;
+import dev.vansen.pancakecore.sql.SQLiteManager;
+import dev.vansen.pancakecore.sql.field.FieldType;
+import dev.vansen.pancakecore.vault.PancakeEconomy;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.Objects;
+
+@SuppressWarnings("unused")
+public final class PancakeCore extends JavaPlugin {
+    private static PancakeCore instance;
+    private static SQLiteManager sqliteEconomy;
+    private static Economy economy;
+
+    @Override
+    public void onEnable() {
+        instance = this;
+        CommandAPI.set(this);
+
+        sqliteEconomy = SQLiteManager.setup()
+                .file(new File(getDataFolder(), "economy/economy.db"))
+                .start();
+
+        if (!sqliteEconomy().exists("economy")) {
+            sqliteEconomy.list("economy")
+                    .field("uuid", FieldType.STRING)
+                    .field("balance", FieldType.DOUBLE)
+                    .create();
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+            Bukkit.getServicesManager().register(Economy.class, new PancakeEconomy(), this, ServicePriority.Highest);
+            economy = Objects.requireNonNull(getServer().getServicesManager().getRegistration(Economy.class)).getProvider();
+        }
+
+        new EconomyCommand();
+        new PayCommand();
+        new BalanceCommand();
+    }
+
+    public static SQLiteManager sqliteEconomy() {
+        return sqliteEconomy;
+    }
+
+    public static PancakeEconomy economy() {
+        return (PancakeEconomy) economy;
+    }
+
+    /**
+     * Plugin instance.
+     *
+     * @return Plugin instance
+     */
+    public static PancakeCore plugin() {
+        return instance;
+    }
+}

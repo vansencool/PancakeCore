@@ -1,0 +1,10 @@
+name: PancakeCore
+version: '${version}'
+main: dev.vansen.pancakecore.PancakeCore
+api-version: '1.21'
+dependencies:
+  server:
+    Vault:
+      load: AFTER
+      required: false
+      join-classpath: true
