@@ -12,20 +12,20 @@ public class HomeCommand {
     public HomeCommand() {
         CommandUtils.command("home")
                 .subCommand(SubCommand.of("set")
-                        .argument(CommandArgument.integer("index")
+                        .argument(CommandArgument.integer("section")
                                 .defaultExecute(context -> {
-                                    HomeManager.createHome(context.player(), context.argInt("index"), context.location());
-                                    context.response("<#87ff93>Home " + context.argInt("index") + " set!");
+                                    HomeManager.createHome(context.player(), context.argInt("section"), context.location());
+                                    context.response("<#87ff93>Home " + context.argInt("section") + " set!");
                                 })))
                 .subCommand(SubCommand.of("tp")
-                        .argument(CommandArgument.integer("index")
+                        .argument(CommandArgument.integer("section")
                                 .defaultExecute(context -> {
-                                    if (!HomeManager.isSet(context.player(), context.argInt("index"))) {
-                                        context.response("<#ff6183>Home " + context.argInt("index") + " is not set!");
+                                    if (!HomeManager.isSet(context.player(), context.argInt("section"))) {
+                                        context.response("<#ff6183>Home " + context.argInt("section") + " is not set!");
                                         return;
                                     }
-                                    context.teleportAsync(Objects.requireNonNull(HomeManager.getHome(context.player(), context.argInt("index"))).getLocation());
-                                    context.response("<#87ff93>You teleported to home " + context.argInt("index"));
+                                    context.teleportAsync(Objects.requireNonNull(HomeManager.getHome(context.player(), context.argInt("section"))).getLocation());
+                                    context.response("<#87ff93>You teleported to home " + context.argInt("section"));
                                 })))
                 .register();
     }

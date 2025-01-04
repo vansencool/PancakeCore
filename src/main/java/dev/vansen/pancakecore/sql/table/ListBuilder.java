@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 @NotThreadSafe
 public final class ListBuilder {
     private String tableName;
@@ -69,7 +69,7 @@ public final class ListBuilder {
      */
     public SQLiteManager create() {
         StringBuilder query = new StringBuilder("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (");
-        fields.forEach((columnName, columnType) -> query.append(columnName).append(" ").append(columnType).append(", "));
+        fields.forEach((columnName, columnType) -> query.append("\"").append(columnName).append("\" ").append(columnType).append(", "));
         query.delete(query.length() - 2, query.length()).append(");");
         try (Statement statement = sqlite.connection().createStatement()) {
             statement.executeUpdate(query.toString());

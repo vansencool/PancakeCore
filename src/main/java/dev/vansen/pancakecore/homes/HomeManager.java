@@ -3,7 +3,7 @@ package dev.vansen.pancakecore.homes;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.DefaultSerializers;
+import com.esotericsoftware.kryo.serializers.MapSerializer;
 import dev.vansen.pancakecore.PancakeCore;
 import dev.vansen.pancakecore.homes.util.Home;
 import org.bukkit.Location;
@@ -14,11 +14,12 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class HomeManager {
     private static final Kryo kryo = new Kryo();
 
     static {
-        kryo.register(HashMap.class, new DefaultSerializers.KryoSerializableSerializer());
+        kryo.register(HashMap.class, new MapSerializer<>());
         kryo.setRegistrationRequired(false);
     }
 
@@ -26,7 +27,7 @@ public class HomeManager {
         PancakeCore.sqliteHomes()
                 .add("homes")
                 .value("uuid", player.getUniqueId().toString())
-                .value("index", index)
+                .value("section", index)
                 .value("location", serialize(location.serialize()))
                 .insert();
     }
@@ -35,7 +36,7 @@ public class HomeManager {
         PancakeCore.sqliteHomes()
                 .delete("homes")
                 .where("uuid", player.getUniqueId().toString())
-                .where("index", index)
+                .where("section", index)
                 .execute();
     }
 
@@ -43,8 +44,9 @@ public class HomeManager {
         return PancakeCore.sqliteHomes()
                 .read()
                 .table("homes")
+                .column("location")
                 .where("uuid", player.getUniqueId().toString())
-                .where("index", index)
+                .where("section", index)
                 .fetch() != null;
     }
 
@@ -52,7 +54,7 @@ public class HomeManager {
         PancakeCore.sqliteHomes()
                 .update("homes")
                 .where("uuid", player.getUniqueId().toString())
-                .where("index", index)
+                .where("section", index)
                 .set("location", serialize(location.serialize()))
                 .execute();
     }
@@ -61,8 +63,9 @@ public class HomeManager {
         byte[] data = PancakeCore.sqliteHomes()
                 .read()
                 .table("homes")
+                .column("location")
                 .where("uuid", player.getUniqueId().toString())
-                .where("index", index)
+                .where("section", index)
                 .fetch(byte[].class);
         if (data == null) return null;
         return new Home(index, Location.deserialize(deserialize(data)));

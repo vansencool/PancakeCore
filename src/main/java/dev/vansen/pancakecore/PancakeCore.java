@@ -2,6 +2,7 @@ package dev.vansen.pancakecore;
 
 import dev.vansen.commandutils.api.CommandAPI;
 import dev.vansen.pancakecore.commands.economy.EconomyCommand;
+import dev.vansen.pancakecore.commands.home.HomeCommand;
 import dev.vansen.pancakecore.commands.user.BalanceCommand;
 import dev.vansen.pancakecore.commands.user.PayCommand;
 import dev.vansen.pancakecore.sql.SQLiteManager;
@@ -41,6 +42,13 @@ public final class PancakeCore extends JavaPlugin {
                     .field("balance", FieldType.DOUBLE)
                     .create();
         }
+        if (!sqliteHomes.exists("homes")) {
+            sqliteHomes.list("homes")
+                    .field("uuid", FieldType.STRING)
+                    .field("section", FieldType.INTEGER)
+                    .field("location", FieldType.BLOB)
+                    .create();
+        }
 
         if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             Bukkit.getServicesManager().register(Economy.class, new PancakeEconomy(), this, ServicePriority.Highest);
@@ -50,6 +58,7 @@ public final class PancakeCore extends JavaPlugin {
         new EconomyCommand();
         new PayCommand();
         new BalanceCommand();
+        new HomeCommand();
     }
 
     public static SQLiteManager sqliteEconomy() {
