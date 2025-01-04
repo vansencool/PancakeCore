@@ -8,9 +8,9 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.List;
 
+@SuppressWarnings("all")
 public class PancakeEconomy implements Economy {
 
-    @SuppressWarnings("ConstantConditions")
     public double getPlayerBalance(String uuid) {
         try {
             return Double.parseDouble(PancakeCore.sqliteEconomy()

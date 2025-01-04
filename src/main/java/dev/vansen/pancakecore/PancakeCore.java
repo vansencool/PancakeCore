@@ -1,6 +1,7 @@
 package dev.vansen.pancakecore;
 
 import dev.vansen.commandutils.api.CommandAPI;
+import dev.vansen.inventoryutils.InventoryUtils;
 import dev.vansen.pancakecore.commands.economy.EconomyCommand;
 import dev.vansen.pancakecore.commands.home.HomeCommand;
 import dev.vansen.pancakecore.commands.user.BalanceCommand;
@@ -27,6 +28,7 @@ public final class PancakeCore extends JavaPlugin {
     public void onEnable() {
         instance = this;
         CommandAPI.set(this);
+        InventoryUtils.init(this);
 
         sqliteEconomy = SQLiteManager.setup()
                 .file(new File(getDataFolder(), "economy/economy.db"))

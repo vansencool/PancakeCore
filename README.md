@@ -5,13 +5,14 @@ This is a core for PancakeNetwork's Economy server
 ### TODO:
 
 - AFK Rewards
-- Spawn
+- Spawn (Integrated to PancakeCore)
 - Utility for staffs
 - Settings for players
-- Home GUI
+- Spawn Protection (Next TODO)
 
 ### Done:
 
 - SQL Wrapper
 - Economy, Balance, Pay
 - Home Logic
+- Home GUI

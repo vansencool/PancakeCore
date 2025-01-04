@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 public class HomeManager {
     private static final Kryo kryo = new Kryo();
 
