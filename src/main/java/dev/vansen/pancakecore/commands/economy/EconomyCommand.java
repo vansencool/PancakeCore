@@ -1,4 +1,4 @@
-package dev.vansen.pancakecore.commands;
+package dev.vansen.pancakecore.commands.economy;
 
 import dev.vansen.commandutils.CommandUtils;
 import dev.vansen.commandutils.argument.CommandArgument;

@@ -2,6 +2,7 @@ name: PancakeCore
 version: '${version}'
 main: dev.vansen.pancakecore.PancakeCore
 api-version: '1.21'
+loader: dev.vansen.pancakecore.loader.PancakeLoader
 dependencies:
   server:
     Vault:

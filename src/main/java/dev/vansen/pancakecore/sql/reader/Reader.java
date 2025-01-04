@@ -8,6 +8,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @NotThreadSafe
@@ -80,12 +82,50 @@ public final class Reader {
     }
 
     /**
+     * Executes the SELECT query and returns the result as a List of objects.
+     *
+     * @return a List of objects representing the result of the query, or an empty List if no rows were found
+     * @throws RuntimeException if the query fails to execute
+     */
+    public @NotNull List<Object> fetchList() {
+        String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + conditionColumn + " = ?;";
+        try (PreparedStatement statement = sqlite.connection().prepareStatement(query)) {
+            statement.setObject(1, conditionValue);
+            ResultSet resultSet = statement.executeQuery();
+            List<Object> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add(resultSet.getObject(columnName));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to read", e);
+        }
+    }
+
+    /**
      * Executes the SELECT query and returns the result, cast to the specified type.
      *
      * @param type the type to cast the result to
      * @return the result of the query, cast to the specified type, or null if no rows were found
      */
+    @SuppressWarnings("unchecked")
     public @Nullable <T> T fetch(@NotNull Class<T> type) {
         return (T) fetch();
+    }
+
+    /**
+     * Executes the SELECT query and returns the result, cast to the specified type.
+     *
+     * @param type the type to cast the result to
+     * @return a List of objects representing the result of the query, cast to the specified type, or an empty List if no rows were found
+     */
+    @SuppressWarnings("unchecked")
+    public @NotNull <T> List<T> fetchList(@NotNull Class<T> type) {
+        List<Object> objects = fetchList();
+        List<T> result = new ArrayList<>(objects.size());
+        for (Object object : objects) {
+            result.add((T) object);
+        }
+        return result;
     }
 }

@@ -1,7 +1,7 @@
 package dev.vansen.pancakecore;
 
 import dev.vansen.commandutils.api.CommandAPI;
-import dev.vansen.pancakecore.commands.EconomyCommand;
+import dev.vansen.pancakecore.commands.economy.EconomyCommand;
 import dev.vansen.pancakecore.commands.user.BalanceCommand;
 import dev.vansen.pancakecore.commands.user.PayCommand;
 import dev.vansen.pancakecore.sql.SQLiteManager;
@@ -19,6 +19,7 @@ import java.util.Objects;
 public final class PancakeCore extends JavaPlugin {
     private static PancakeCore instance;
     private static SQLiteManager sqliteEconomy;
+    private static SQLiteManager sqliteHomes;
     private static Economy economy;
 
     @Override
@@ -28,6 +29,10 @@ public final class PancakeCore extends JavaPlugin {
 
         sqliteEconomy = SQLiteManager.setup()
                 .file(new File(getDataFolder(), "economy/economy.db"))
+                .start();
+
+        sqliteHomes = SQLiteManager.setup()
+                .file(new File(getDataFolder(), "homes/homes.db"))
                 .start();
 
         if (!sqliteEconomy().exists("economy")) {
@@ -49,6 +54,10 @@ public final class PancakeCore extends JavaPlugin {
 
     public static SQLiteManager sqliteEconomy() {
         return sqliteEconomy;
+    }
+
+    public static SQLiteManager sqliteHomes() {
+        return sqliteHomes;
     }
 
     public static PancakeEconomy economy() {
