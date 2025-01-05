@@ -6,6 +6,9 @@ import dev.vansen.pancakecore.commands.economy.EconomyCommand;
 import dev.vansen.pancakecore.commands.home.HomeCommand;
 import dev.vansen.pancakecore.commands.user.BalanceCommand;
 import dev.vansen.pancakecore.commands.user.PayCommand;
+import dev.vansen.pancakecore.event.EventManager;
+import dev.vansen.pancakecore.events.block.BlockBreak;
+import dev.vansen.pancakecore.events.block.BlockPlace;
 import dev.vansen.pancakecore.placeholders.Placeholders;
 import dev.vansen.pancakecore.sql.SQLiteManager;
 import dev.vansen.pancakecore.sql.field.FieldType;
@@ -67,6 +70,7 @@ public final class PancakeCore extends JavaPlugin {
         new PayCommand();
         new BalanceCommand();
         new HomeCommand();
+        events();
     }
 
     public static SQLiteManager sqliteEconomy() {
@@ -88,5 +92,9 @@ public final class PancakeCore extends JavaPlugin {
      */
     public static PancakeCore plugin() {
         return instance;
+    }
+
+    private void events() {
+        EventManager.register(BlockBreak.class, BlockPlace.class);
     }
 }

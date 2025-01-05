@@ -8,7 +8,6 @@ This is a core for PancakeNetwork's Economy server
 - Spawn (Integrated to PancakeCore)
 - Utility for staffs
 - Settings for players
-- Spawn Protection (Next TODO)
 
 ### Done:
 
@@ -17,3 +16,4 @@ This is a core for PancakeNetwork's Economy server
 - Home Logic
 - Home GUI
 - PlaceholderAPI
+- Spawn Protection
