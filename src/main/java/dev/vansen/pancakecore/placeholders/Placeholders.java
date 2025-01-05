@@ -35,7 +35,7 @@ public class Placeholders extends PlaceholderExpansion {
                         .getBalance(player));
             }
             case "tps" -> {
-                return String.valueOf(Bukkit.getServer().getTPS().length > 0 ? Bukkit.getServer().getTPS()[0] : 20.0);
+                return String.format("%.1f", Bukkit.getServer().getTPS().length > 0 ? Bukkit.getServer().getTPS()[0] : 20.0);
             }
             case "ping" -> {
                 if (player instanceof Player online) return String.valueOf(online.getPing());
