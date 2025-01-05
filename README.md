@@ -16,3 +16,4 @@ This is a core for PancakeNetwork's Economy server
 - Economy, Balance, Pay
 - Home Logic
 - Home GUI
+- PlaceholderAPI

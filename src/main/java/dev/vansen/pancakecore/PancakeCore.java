@@ -6,6 +6,7 @@ import dev.vansen.pancakecore.commands.economy.EconomyCommand;
 import dev.vansen.pancakecore.commands.home.HomeCommand;
 import dev.vansen.pancakecore.commands.user.BalanceCommand;
 import dev.vansen.pancakecore.commands.user.PayCommand;
+import dev.vansen.pancakecore.placeholders.Placeholders;
 import dev.vansen.pancakecore.sql.SQLiteManager;
 import dev.vansen.pancakecore.sql.field.FieldType;
 import dev.vansen.pancakecore.vault.PancakeEconomy;
@@ -55,6 +56,11 @@ public final class PancakeCore extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             Bukkit.getServicesManager().register(Economy.class, new PancakeEconomy(), this, ServicePriority.Highest);
             economy = Objects.requireNonNull(getServer().getServicesManager().getRegistration(Economy.class)).getProvider();
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new Placeholders().register();
+
         }
 
         new EconomyCommand();

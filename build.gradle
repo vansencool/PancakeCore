@@ -16,12 +16,14 @@ ext {
 repositories {
     maven { url 'https://jitpack.io' }
     maven { url "https://repo.papermc.io/repository/maven-public/" }
+    maven { url 'https://repo.extendedclip.com/releases/' }
 }
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:$paper-R0.1-SNAPSHOT"
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"
     compileOnly 'com.esotericsoftware:kryo:5.6.2'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
     implementation "com.github.vansencool:CommandUtils:$commandUtils"
     implementation 'com.github.vansencool:InventoryUtils:1.0.9'
 }
