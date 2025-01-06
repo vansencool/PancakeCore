@@ -2,11 +2,14 @@ package dev.vansen.pancakecore;
 
 import dev.vansen.commandutils.api.CommandAPI;
 import dev.vansen.inventoryutils.InventoryUtils;
+import dev.vansen.pancakecore.commands.CommandManager;
 import dev.vansen.pancakecore.commands.economy.EconomyCommand;
 import dev.vansen.pancakecore.commands.home.HomeCommand;
+import dev.vansen.pancakecore.commands.staff.FeedCommand;
+import dev.vansen.pancakecore.commands.staff.HealCommand;
 import dev.vansen.pancakecore.commands.user.BalanceCommand;
 import dev.vansen.pancakecore.commands.user.PayCommand;
-import dev.vansen.pancakecore.event.EventManager;
+import dev.vansen.pancakecore.events.EventManager;
 import dev.vansen.pancakecore.events.block.BlockBreak;
 import dev.vansen.pancakecore.events.block.BlockPlace;
 import dev.vansen.pancakecore.placeholders.Placeholders;
@@ -63,14 +66,10 @@ public final class PancakeCore extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new Placeholders().register();
-
         }
 
-        new EconomyCommand();
-        new PayCommand();
-        new BalanceCommand();
-        new HomeCommand();
         events();
+        commands();
     }
 
     public static SQLiteManager sqliteEconomy() {
@@ -96,5 +95,15 @@ public final class PancakeCore extends JavaPlugin {
 
     private void events() {
         EventManager.register(BlockBreak.class, BlockPlace.class);
+    }
+
+    private void commands() {
+        CommandManager.register(
+                HomeCommand.class,
+                EconomyCommand.class,
+                FeedCommand.class,
+                BalanceCommand.class,
+                PayCommand.class,
+                HealCommand.class);
     }
 }

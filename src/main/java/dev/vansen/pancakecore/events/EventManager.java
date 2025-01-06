@@ -1,4 +1,4 @@
-package dev.vansen.pancakecore.event;
+package dev.vansen.pancakecore.events;
 
 import dev.vansen.pancakecore.PancakeCore;
 import org.bukkit.Bukkit;

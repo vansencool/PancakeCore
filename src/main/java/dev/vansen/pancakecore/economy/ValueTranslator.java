@@ -3,17 +3,20 @@ package dev.vansen.pancakecore.economy;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ThreadSafe
 public class ValueTranslator {
 
-    private static final Map<String, Double> SUFFIX_MAP = Map.of(
-            "K", 1000D,
-            "M", 1000000D,
-            "B", 1000000000D,
-            "T", 1000000000000D
-    );
+    private static final Map<String, Double> SUFFIX_MAP = new LinkedHashMap<>();
+
+    static {
+        SUFFIX_MAP.put("T", 1000000000000D);
+        SUFFIX_MAP.put("B", 1000000000D);
+        SUFFIX_MAP.put("M", 1000000D);
+        SUFFIX_MAP.put("K", 1000D);
+    }
 
     public static double convert(@NotNull String value) {
         String suffix = value.replaceAll("[^kKmMbBtT]", "").toUpperCase();
@@ -50,10 +53,6 @@ public class ValueTranslator {
                 }
             }
         }
-        if (value % 1 == 0) {
-            return String.format("%.0f", value);
-        } else {
-            return String.format("%.1f", value);
-        }
+        return String.format("%.1f", value);
     }
 }

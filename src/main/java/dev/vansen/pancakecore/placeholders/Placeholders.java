@@ -1,6 +1,7 @@
 package dev.vansen.pancakecore.placeholders;
 
 import dev.vansen.pancakecore.PancakeCore;
+import dev.vansen.pancakecore.economy.ValueTranslator;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -12,26 +13,26 @@ public class Placeholders extends PlaceholderExpansion {
     @Override
     @NotNull
     public String getAuthor() {
-        return "vansen"; //
+        return "vansen";
     }
 
     @Override
     @NotNull
     public String getIdentifier() {
-        return "pancakecore"; //
+        return "pancakecore";
     }
 
     @Override
     @NotNull
     public String getVersion() {
-        return "1.0.0"; //
+        return "1.0.0";
     }
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         switch (params) {
             case "balance" -> {
-                return String.valueOf(PancakeCore.economy()
+                return ValueTranslator.format(PancakeCore.economy()
                         .getBalance(player));
             }
             case "tps" -> {

@@ -20,7 +20,7 @@ public class EconomyCommand {
                                             try {
                                                 double amount = ValueTranslator.convert(context.argString("amount"));
                                                 PancakeCore.economy().depositPlayer(context.player(), amount);
-                                                context.response("<color:#87ff93>You deposited " + amount + " to " + context.argPlayer("who").getName());
+                                                context.response("<color:#87ff93>You deposited " + context.argString("amount") + " to " + context.argPlayer("who").getName());
                                             } catch (Exception e) {
                                                 context.response("<#ff6183>Error: " + e.getMessage());
                                             }

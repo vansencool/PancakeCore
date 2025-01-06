@@ -13,6 +13,7 @@ public class PancakeLoader implements PluginLoader {
     public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {
         String[][] dependencies = {
                 {"com.esotericsoftware", "kryo", "5.6.2"},
+                {"com.github.ben-manes.caffeine", "caffeine", "3.1.8"},
         };
 
         classpathBuilder.getContext().getLogger().info("Downloading/Loading all dependencies...");
