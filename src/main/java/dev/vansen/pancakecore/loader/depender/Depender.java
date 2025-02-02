@@ -109,6 +109,19 @@ public class Depender {
     }
 
     /**
+     * Downloads only one dependency from the repository.
+     * <p>
+     * This will not download the dependencies of the dependency.
+     *
+     * @param group    the group of the dependency
+     * @param artifact the artifact of the dependency
+     * @param version  the version of the dependency
+     */
+    public void downloadOnlyOne(@NotNull String group, @NotNull String artifact, @NotNull String version) {
+        downloadJar(group, artifact, version);
+    }
+
+    /**
      * Downloads a specific dependency from the repository.
      *
      * @param group    the group of the dependency

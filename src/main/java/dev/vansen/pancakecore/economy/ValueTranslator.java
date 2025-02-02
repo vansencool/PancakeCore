@@ -42,6 +42,10 @@ public class ValueTranslator {
     }
 
     public static String format(double value) {
+        if (value == 0) {
+            return "0";
+        }
+
         for (Map.Entry<String, Double> entry : SUFFIX_MAP.entrySet()) {
             double suffixValue = entry.getValue();
             if (value >= suffixValue) {

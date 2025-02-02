@@ -13,10 +13,9 @@ import dev.vansen.pancakecore.events.EventManager;
 import dev.vansen.pancakecore.events.block.BlockBreak;
 import dev.vansen.pancakecore.events.block.BlockPlace;
 import dev.vansen.pancakecore.placeholders.Placeholders;
-import dev.vansen.pancakecore.sql.SQLiteManager;
-import dev.vansen.pancakecore.sql.field.FieldType;
 import dev.vansen.pancakecore.vault.PancakeEconomy;
 import net.milkbowl.vault.economy.Economy;
+import net.vansen.noksdb.NoksDB;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,57 +26,16 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public final class PancakeCore extends JavaPlugin {
     private static PancakeCore instance;
-    private static SQLiteManager sqliteEconomy;
-    private static SQLiteManager sqliteHomes;
     private static Economy economy;
+    private static NoksDB storeEconomy;
+    private static NoksDB storeHomes;
 
-    @Override
-    public void onEnable() {
-        instance = this;
-        CommandAPI.set(this);
-        InventoryUtils.init(this);
-
-        sqliteEconomy = SQLiteManager.setup()
-                .file(new File(getDataFolder(), "economy/economy.db"))
-                .start();
-
-        sqliteHomes = SQLiteManager.setup()
-                .file(new File(getDataFolder(), "homes/homes.db"))
-                .start();
-
-        if (!sqliteEconomy().exists("economy")) {
-            sqliteEconomy.list("economy")
-                    .field("uuid", FieldType.STRING)
-                    .field("balance", FieldType.DOUBLE)
-                    .create();
-        }
-        if (!sqliteHomes.exists("homes")) {
-            sqliteHomes.list("homes")
-                    .field("uuid", FieldType.STRING)
-                    .field("section", FieldType.INTEGER)
-                    .field("location", FieldType.BLOB)
-                    .create();
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-            Bukkit.getServicesManager().register(Economy.class, new PancakeEconomy(), this, ServicePriority.Highest);
-            economy = Objects.requireNonNull(getServer().getServicesManager().getRegistration(Economy.class)).getProvider();
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new Placeholders().register();
-        }
-
-        events();
-        commands();
+    public static NoksDB storeEconomy() {
+        return storeEconomy;
     }
 
-    public static SQLiteManager sqliteEconomy() {
-        return sqliteEconomy;
-    }
-
-    public static SQLiteManager sqliteHomes() {
-        return sqliteHomes;
+    public static NoksDB storeHomes() {
+        return storeHomes;
     }
 
     public static PancakeEconomy economy() {
@@ -91,6 +49,37 @@ public final class PancakeCore extends JavaPlugin {
      */
     public static PancakeCore plugin() {
         return instance;
+    }
+
+    @Override
+    public void onEnable() {
+        instance = this;
+        CommandAPI.set(this);
+        InventoryUtils.init(this);
+
+        storeEconomy = NoksDB.builder()
+                .autoSaveAsync(true)
+                .requireClassRegistration(false)
+                .storageFile(new File(getDataFolder(), "economy/economy.dat"))
+                .build();
+
+        storeHomes = NoksDB.builder()
+                .autoSaveAsync(true)
+                .requireClassRegistration(false)
+                .storageFile(new File(getDataFolder(), "homes/homes.dat"))
+                .build();
+
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+            Bukkit.getServicesManager().register(Economy.class, new PancakeEconomy(), this, ServicePriority.Highest);
+            economy = Objects.requireNonNull(getServer().getServicesManager().getRegistration(Economy.class)).getProvider();
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new Placeholders().register();
+        }
+
+        events();
+        commands();
     }
 
     private void events() {

@@ -12,42 +12,22 @@ import java.util.List;
 public class PancakeEconomy implements Economy {
 
     public double getPlayerBalance(String uuid) {
-        try {
-            return Double.parseDouble(PancakeCore.sqliteEconomy()
-                    .read()
-                    .table("economy")
-                    .column("balance")
-                    .where("uuid", uuid)
-                    .fetch().toString());
-        } catch (Exception e) {
-            return 0;
-        }
+        return PancakeCore.storeEconomy()
+                .fetch(uuid)
+                .field("balance")
+                .getOrDefaultCast(Double.class, 0.0);
     }
 
     public boolean playerExists(String uuid) {
-        return PancakeCore.sqliteEconomy()
-                .read()
-                .table("economy")
-                .column("balance")
-                .where("uuid", uuid)
-                .fetch() != null;
+        return PancakeCore.storeEconomy()
+                .exists(uuid);
     }
 
     public void updateBalance(String uuid, double newBalance) {
-        if (!playerExists(uuid)) {
-            PancakeCore.sqliteEconomy()
-                    .add("economy")
-                    .value("uuid", uuid)
-                    .value("balance", newBalance)
-                    .insert();
-            return;
-        }
-
-        PancakeCore.sqliteEconomy()
-                .update("economy")
-                .where("uuid", uuid)
-                .set("balance", newBalance)
-                .execute();
+        PancakeCore.storeEconomy()
+                .rowOf(uuid)
+                .value("balance", newBalance)
+                .insertAsync();
     }
 
     @Override
@@ -251,11 +231,10 @@ public class PancakeEconomy implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        PancakeCore.sqliteEconomy()
-                .add("economy")
-                .value("uuid", player.getUniqueId().toString())
+        PancakeCore.storeEconomy()
+                .rowOf(player.getUniqueId().toString())
                 .value("balance", 0)
-                .insert();
+                .insertAsync();
         return true;
     }
 
